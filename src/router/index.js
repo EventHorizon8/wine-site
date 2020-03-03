@@ -8,6 +8,11 @@ const routes = [
         path: '/',
         name: 'wine-list',
         component: ()=> import('../dashboards/WineList.vue')
+    },
+    {
+        path: '/card/:wine_id/:vintage',
+        name: 'oneCard',
+        component: ()=> import('../dashboards/WineCard.vue')
     }
 ];
 

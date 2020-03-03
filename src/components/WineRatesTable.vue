@@ -12,8 +12,12 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="item in items" :key="item.id">
-              <td>{{item.wine}}</td>
+          <tr v-for="item in items" :key="item.id" >
+              <td>
+                  <router-link :to="{name: 'oneCard', params: {wine_id: item.wine_id, vintage: item.vintage}}">
+                      {{ item.wine }}
+                  </router-link>
+              </td>
               <td>{{item.color}}</td>
               <td>{{item.wineType}}</td>
               <td>{{item.vintage}}</td>

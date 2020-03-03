@@ -2,20 +2,20 @@
     <div>
         <form @submit.prevent="submitForm">
             <label for="color">Color</label>
-            <select name="color" id="color" v-model="form.color" :disabled="sending">
+            <select name="color" id="color" v-model="form.color">
                 <option value="red">red</option>
                 <option value="white">white</option>
                 <option value="pink">pink</option>
             </select>
             <label for="wine-type">Type</label>
-            <select name="wine-type" id="wine-type" v-model="form.wineType" :disabled="sending">
+            <select name="wine-type" id="wine-type" v-model="form.wineType">
                 <option value="dry">dry</option>
                 <option value="sweet">sweet</option>
             </select>
             <label for="country">Country</label>
-            <input name="country" id="country" v-model="form.country" :disabled="sending"/>
+            <input name="country" id="country" v-model="form.country"/>
             <label for="vintage">Vintage</label>
-            <input name="vintage" id="vintage" v-model="form.vintage" :disabled="vintage"/>
+            <input name="vintage" id="vintage" v-model="form.vintage"/>
             <button type="submit" :disabled="isLoading">Show</button>
         </form>
         <WineRatesTable :items="items"/>
