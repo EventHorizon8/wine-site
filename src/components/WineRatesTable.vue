@@ -1,7 +1,7 @@
 <template>
   <div>
       <table class="table table-hover rates-table">
-          <thead class="rates-table">
+          <thead>
           <tr>
               <th scope="col">Wine</th>
               <th scope="col">Color</th>
@@ -47,9 +47,14 @@
 <style lang="scss">
     table.rates-table {
         margin: 10px 0 0 0;
-        thead.rates-table {
+        thead {
             background: $secondaryLightColor;
             color: $textColorOnColorBackground;
+        }
+        tbody {
+            tr:hover {
+                cursor: pointer;
+            }
         }
         span.wine-color-circle {
             display: block;

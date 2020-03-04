@@ -139,7 +139,6 @@
         background-color: $pinkColor;
     }
 
-
     /* Circle with rate*/
     .flex-wrapper {
         display: flex;
@@ -147,7 +146,7 @@
     }
 
     .single-chart {
-        width: 50%;
+        width: 60%;
         justify-content: space-around;
     }
 
@@ -183,7 +182,7 @@
 
     .percentage {
         fill: $textColor;
-        font-size: 0.75em;
+        font-size: 0.60em;
         text-anchor: middle;
     }
 
