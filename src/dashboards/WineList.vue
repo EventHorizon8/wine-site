@@ -1,24 +1,34 @@
 <template>
     <div>
-        <form @submit.prevent="submitForm">
-            <label for="color">Color</label>
-            <select name="color" id="color" v-model="form.color">
-                <option value="red">red</option>
-                <option value="white">white</option>
-                <option value="pink">pink</option>
-            </select>
-            <label for="wine-type">Type</label>
-            <select name="wine-type" id="wine-type" v-model="form.wineType">
-                <option value="dry">dry</option>
-                <option value="sweet">sweet</option>
-            </select>
-            <label for="country">Country</label>
-            <input name="country" id="country" v-model="form.country"/>
-            <label for="vintage">Vintage</label>
-            <input name="vintage" id="vintage" v-model="form.vintage"/>
-            <button type="submit" :disabled="isLoading">Show</button>
-        </form>
-        <WineRatesTable :items="items"/>
+        <div class="search-filters-container">
+            <form @submit.prevent="submitForm" class="search-filters-form">
+                <label for="color">
+                    <select name="color" id="color" v-model="form.color">
+                        <option value="" disabled selected>Color</option>
+                        <option value="red">Red</option>
+                        <option value="white">White</option>
+                        <option value="pink">Pink</option>
+                    </select>
+                </label>
+                <label for="wine-type">
+                    <select name="wine-type" id="wine-type" v-model="form.wineType">
+                        <option value="" disabled selected>Type</option>
+                        <option value="dry">Dry</option>
+                        <option value="sweet">Sweet</option>
+                    </select>
+                </label>
+                <label for="country">
+                    <input name="country" id="country" v-model="form.country" placeholder="Country"/>
+                </label>
+                <label for="vintage">
+                    <input name="vintage" id="vintage" v-model="form.vintage" placeholder="Vintage"/>
+                </label>
+                <button type="submit" :disabled="isLoading">Show</button>
+            </form>
+        </div>
+        <div class="container">
+            <WineRatesTable :items="items"/>
+        </div>
     </div>
 </template>
 
@@ -74,6 +84,43 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+    .search-filters-container {
+        text-align: center;
+        background: $primaryColor;
+        padding: 10px 0 10px 0;
+        .search-filters-form {
+            label select, input {
+                background: $primaryLightColor;
+                border: 1px solid $primaryColor;
+                border-radius: 3px;
+                color: $textColorOnColorBackground;
+                padding: 5px 10px;
+                margin: 0 5px 0 0;
+                box-sizing: content-box;
+                height: 30px;
+            }
 
+            label select:focus, select:hover, input:focus, input:hover, textarea:focus, textarea:hover {
+                background: $primaryLightColorFocus;
+                border: 1px solid $primaryColorFocus;
+            }
+            ::placeholder {
+                color: $textColorOnColorBackground;
+                opacity: 0.5;
+            }
+            button {
+                box-sizing: content-box;
+                border: none;
+                height: 30px;
+                padding: 5px 15px;
+                border-radius: 3px;
+                background: $primaryDarkColor;
+                color: $textColorOnColorBackground;
+            }
+            button:focus, button:hover {
+                background: $primaryDarkColorFocus;
+            }
+        }
+    }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
-      <table class="table">
-          <thead>
+      <table class="table table-hover rates-table">
+          <thead class="rates-table">
           <tr>
               <th scope="col">Wine</th>
               <th scope="col">Color</th>
@@ -12,18 +12,15 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="item in items" :key="item.id" >
-              <td>
-                  <router-link :to="{name: 'oneCard', params: {wine_id: item.wine_id, vintage: item.vintage}}">
-                      {{ item.wine }}
-                  </router-link>
-              </td>
-              <td>{{item.color}}</td>
+          <router-link v-for="item in items" :key="item.id" tag="tr"
+                       :to="{name: 'oneCard', params: {wine_id: item.wine_id, vintage: item.vintage}}">
+              <td>{{ item.wine }}</td>
+              <td><span class="wine-color-circle"><em :class="[item.color, 'color']"></em></span></td>
               <td>{{item.wineType}}</td>
               <td>{{item.vintage}}</td>
               <td>{{item.country}}</td>
-              <td>{{item.score}}</td>
-          </tr>
+              <td><!--<i class="fa fa-star"></i>-->{{item.score}}</td>
+          </router-link>
           </tbody>
       </table>
   </div>
@@ -47,6 +44,37 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+    table.rates-table {
+        margin: 10px 0 0 0;
+        thead.rates-table {
+            background: $secondaryLightColor;
+            color: $textColorOnColorBackground;
+        }
+        span.wine-color-circle {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: solid 2px $gray;
+            padding: 3px;
+            box-sizing: border-box;
+            em {
+                width: 10px;
+                height: 10px;
+                display: block;
+                border-radius: 50%;
+            }
+            em.Red.color {
+                background: $redColor;
+            }
+            em.White.color {
+                background: $whiteColor;
+            }
 
+            em.Pink.color {
+                background: $pinkColor;
+            }
+        }
+    }
 </style>

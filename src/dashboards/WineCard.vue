@@ -1,47 +1,59 @@
 <template>
     <div>
-        <div>
-            <h4>Name</h4>
-            <p>{{item.wine}}, {{item.vintage}}</p>
-        </div>
-        <div>
-            <h4>Country</h4>
-            <p>{{item.country}}</p>
-        </div>
-        <div>
-            <h4>Appellation</h4>
-            <p>{{item.appellation}}</p>
-        </div>
-        <div>
-            <h4>Color</h4>
-            <p>{{item.color}}</p>
-        </div>
-
-        <div>
-            <h4>Global Wine Score</h4>
-            <span>
-                {{item.score}}/100
-            </span>
-            <p>Updated: {{item.date}}</p>
-        </div>
-        <div>
-            <div>
-                <h2>GWS Calculation based on</h2>
-                <p class="score mt10">
-                    {{item.journalist_count}} <span class="font-p">Wine Critics</span>
-                </p>
-            </div>
-
-            <div>
-                <h2>Confidence index</h2>
-                <p>{{item.confidence_index}}</p>
+        <div class="container">
+            <div class="row card-info">
+                <div class="col-8">
+                    <h1>{{item.wine}}, {{item.vintage}}</h1>
+                    <div><span class="description-field">COUNTRY: </span><span>{{item.country}}</span></div>
+                    <div><span class="description-field">APPELATION: </span><span>{{item.appellation}}</span></div>
+                    <div class="rate-container row">
+                        <div class="col">
+                            <div class="row-container">
+                                <div class="description-field">GLOBAL WINE SCORE</div>
+                                <div class="flex-wrapper">
+                                    <div class="single-chart">
+                                        <svg viewBox="0 0 36 36" class="circular-chart green">
+                                            <path class="circle-bg"
+                                                  d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            />
+                                            <path class="circle"
+                                                  @stroke-dasharray="item.score + ', 100'"
+                                                  d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            />
+                                            <text x="18" y="20.35" class="percentage">{{item.score}}</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="update-date-container"><span>Updated: {{item.date }}</span></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row-container">
+                                <div class="description-field">GWS CALCULATION BASED ON</div>
+                                <div><span
+                                        class="score-title">{{item.journalist_count}}</span><span> Wine Critics</span>
+                                </div>
+                            </div>
+                            <div class="row-container with-border">
+                                <div class="description-field">CONFIDENCE INDEX</div>
+                                <div><span class="score-title">{{item.confidence_index}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div :class="[item.color, 'wine-image']"></div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    console.log('here');
     export default {
         name: "WineCard",
         data() {
@@ -53,10 +65,126 @@
             item() {
                 return this.$store.getters.getWines[0]
             }
-        }
+        },
+        created: async function () {
+            await this.$store.dispatch('getWines', this.$route.params)
+        },
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+    .card-info {
+        margin: 10px 0 0 0;
+
+        .description-field {
+            color: $gray;
+        }
+
+        .rate-container {
+            box-sizing: border-box;
+            border: 1px solid $lightGray;
+            border-radius: 3px;
+            margin: 10px 0 0 0;
+            position: relative;
+
+            .col {
+                padding: 0;
+
+                .row-container {
+                    padding: 10px 20px;
+                }
+
+                .row-container.with-border {
+                    border-top: 1px solid $lightGray;
+                }
+            }
+
+            .col:first-child {
+                border-right: 1px solid $lightGray;
+            }
+
+            .score-title {
+                font-size: 3em;
+            }
+
+            .update-date-container {
+                color: $gray;
+                font-size: 0.8em;
+                position: absolute;
+                bottom: 0;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .wine-image {
+        mask-image: url("./../assets/wineImage.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 250px;
+        background-color: $secondaryLightColor;
+        width: 100%;
+        height: 100%;
+    }
+
+    .wine-image.Red {
+        background-color: $redColor;
+    }
+
+    .wine-image.White {
+        background-color: $whiteColor;
+    }
+
+    .wine-image.Pink {
+        background-color: $pinkColor;
+    }
+
+
+    /* Circle with rate*/
+    .flex-wrapper {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .single-chart {
+        width: 50%;
+        justify-content: space-around;
+    }
+
+    .circular-chart {
+        display: block;
+        margin: 10px auto;
+        max-width: 80%;
+        max-height: 250px;
+    }
+
+    .circle-bg {
+        fill: none;
+        stroke: #eee;
+        stroke-width: 3.8;
+    }
+
+    .circle {
+        fill: none;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        animation: progress 1s ease-out forwards;
+    }
+
+    @keyframes progress {
+        0% {
+            stroke-dasharray: 0 100;
+        }
+    }
+
+    .circular-chart.green .circle {
+        stroke: #4CC790;
+    }
+
+    .percentage {
+        fill: $textColor;
+        font-size: 0.75em;
+        text-anchor: middle;
+    }
 
 </style>
