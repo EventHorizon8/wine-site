@@ -20,20 +20,37 @@
                 <label for="country">
                     <input name="country" id="country" v-model="form.country" placeholder="Country"/>
                 </label>
-                <ValidationProvider :rules="{between: {min: form.minVintage, max: form.maxVintage}}" v-slot="{ errors }">
-                        <label for="vintage" style="position: relative">
-                            <input name="vintage" id="vintage" v-model="form.vintage"
-                                   placeholder="Vintage" type="number"/>
-                            <span class="error-text " v-if="errors[0]" style="position: absolute; bottom: -20px; left: 0">
+                <ValidationProvider :rules="{between: {min: form.minVintage, max: form.maxVintage}}"
+                                    v-slot="{ errors }">
+                    <label for="vintage" style="position: relative">
+                        <input name="vintage" id="vintage" v-model="form.vintage"
+                               placeholder="Vintage" type="number"/>
+                        <span class="error-text " v-if="errors[0]" style="position: absolute; bottom: -20px; left: 0">
                                 Vintage are not available
                             </span>
-                        </label>
+                    </label>
                 </ValidationProvider>
                 <button type="submit" :disabled="isLoading">Show</button>
             </form>
         </div>
         <div class="container" v-if="!isLoading">
             <WineRatesTable :items="items"/>
+            <nav>
+                <paginate v-model="winePage"
+                        :page-count="globalItemsCount"
+                        class="pagination"
+                        :prev-class="'page-item'"
+                        :prev-link-class="'page-link'"
+                        :next-class="'page-item'"
+                        :next-link-class="'page-link'"
+                        :prev-text="'Prev'"
+                        :next-text="'Next'"
+                        :container-class="'pagination'"
+                        :page-class="'page-item'"
+                        :page-link-class="'page-link'"
+                        :click-handler="clickCallback">
+                </paginate>
+            </nav>
         </div>
         <p v-if="isLoading">Loading...</p>
     </div>
@@ -57,12 +74,16 @@
                     minVintage: 1863,
                     maxVintage: new Date().getFullYear(),
                 },
+                winePage: 1,
                 isLoading: true
             };
         },
         computed: {
             items() {
                 return this.$store.getters.getWines
+            },
+            globalItemsCount() {
+                return this.$store.getters.getPages
             }
         },
         created: async function () {
@@ -72,9 +93,10 @@
             })
         },
         methods: {
-            submitForm() {
+            submitForm(pageNumber = 1) {
                 const queryParams = {
                     color: this.form.color,
+                    pageNumber: pageNumber,
                 };
                 if (this.form.wineType) {
                     queryParams["wine-type"] = this.form.wineType;
@@ -90,6 +112,10 @@
                 this.$store.dispatch('getWines', queryParams).then(() => {
                     this.isLoading = false;
                 })
+            },
+            clickCallback(pageNum) {
+                this.winePage = pageNum;
+                this.submitForm(this.winePage);
             }
         }
     }
@@ -100,6 +126,7 @@
         text-align: center;
         background: $primaryColor;
         padding: 10px 0 20px 0;
+
         .search-filters-form {
             label select, input {
                 background: $primaryLightColor;
@@ -116,15 +143,18 @@
                 background: $primaryLightColorFocus;
                 border: 1px solid $primaryColorFocus;
             }
+
             span.error-text {
                 color: $textColorOnColorBackground;
                 font-size: 0.7em;
                 opacity: 0.8;
             }
+
             ::placeholder {
                 color: $textColorOnColorBackground;
                 opacity: 0.5;
             }
+
             button {
                 box-sizing: content-box;
                 border: none;
@@ -134,9 +164,22 @@
                 background: $primaryDarkColor;
                 color: $textColorOnColorBackground;
             }
+
             button:focus, button:hover {
                 background: $primaryDarkColorFocus;
             }
         }
+    }
+
+    nav ul.pagination {
+        margin: 20px 0 40px 0;
+        li.page-item.active {
+            a.page-link {
+                background-color: $primaryDarkColor;
+                border-color: $primaryDarkColor;
+
+            }
+        }
+
     }
 </style>

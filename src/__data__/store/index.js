@@ -13,13 +13,14 @@ export default new Vuex.Store({
     },
     actions: {
         async getWines({commit}, params) {
+            params.offset = (params.pageNumber ? (params.pageNumber - 1) : 0 ) * API_URLS.LIMIT;
             console.log('params', params)
             try {
                 const res = await axios.get(API_URLS.RANDOM_WINES, {
                     method: 'GET',
                     params: {
                         ... params,
-                        limit: 20,
+                        limit: API_URLS.LIMIT,
                         ordering: '-score'
                     },
                     headers: {
@@ -29,9 +30,11 @@ export default new Vuex.Store({
                 });
 
                 if(res){
-                    const { results } = res.data;
+                    const { results, count } = res.data;
                     console.log('results', results);
+                    console.log('count', count);
                     commit(types.GET_WINE, results);
+                    commit(types.GET_WINE_COUNT, count);
                 }
             } catch (e) {
                 console.log(e)
@@ -42,9 +45,13 @@ export default new Vuex.Store({
     mutations: {
         [types.GET_WINE](state, results) {
             state.wines = results;
+        },
+        [types.GET_WINE_COUNT](state, count) {
+            state.wineCount = count;
         }
     },
     getters: {
-        getWines: (state) => state.wines
+        getWines: (state) => state.wines,
+        getPages: (state) => Math.ceil(state.wineCount / API_URLS.LIMIT),
     }
 })
