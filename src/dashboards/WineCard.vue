@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="container" v-if="!isLoading">
             <div class="row card-info">
                 <div class="col-8">
                     <h1>{{item.wine}}, {{item.vintage}}</h1>
@@ -15,14 +15,14 @@
                                         <svg viewBox="0 0 36 36" class="circular-chart green">
                                             <path class="circle-bg"
                                                   d="M18 2.0845
-          a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                  a 15.9155 15.9155 0 0 1 0 31.831
+                                                  a 15.9155 15.9155 0 0 1 0 -31.831"
                                             />
                                             <path class="circle"
                                                   @stroke-dasharray="item.score + ', 100'"
                                                   d="M18 2.0845
-          a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                  a 15.9155 15.9155 0 0 1 0 31.831
+                                                  a 15.9155 15.9155 0 0 1 0 -31.831"
                                             />
                                             <text x="18" y="20.35" class="percentage">{{item.score}}</text>
                                         </svg>
@@ -50,6 +50,7 @@
                 </div>
             </div>
         </div>
+        <p v-if="isLoading">Loading...</p>
     </div>
 </template>
 
@@ -58,7 +59,7 @@
         name: "WineCard",
         data() {
             return {
-                isLoading: false
+                isLoading: true
             };
         },
         computed: {
@@ -67,7 +68,9 @@
             }
         },
         created: async function () {
-            await this.$store.dispatch('getWines', this.$route.params)
+            await this.$store.dispatch('getWines', this.$route.params).then(() => {
+                this.isLoading = false;
+            })
         },
     }
 </script>

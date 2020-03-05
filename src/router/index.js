@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/',
-        name: 'wine-list',
+        name: 'wineList',
         component: ()=> import('../dashboards/WineList.vue')
     },
     {

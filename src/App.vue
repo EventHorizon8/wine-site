@@ -4,13 +4,15 @@
             <div class="site-header-container">
                 <div class="header-line"></div>
                 <div class="site-name-container">
-                    <h1 class="site-name">WINE RATING</h1>
+                    <h1 class="site-name">
+                        <router-link :to="{name: 'wineList'}" tag="a">
+                        WINE RATING
+                        </router-link>
+                    </h1>
                 </div>
                 <div class="header-line"></div>
             </div>
         </div>
-        <!--<div class="navigation">here sometext</div>-->
-        <!--<img id="logo" alt="Vue logo" src="./assets/logo.svg">-->
         <router-view/>
     </div>
 </template>
@@ -63,6 +65,13 @@
                 h1.site-name {
                     margin: 0;
                     font-size: 64px;
+                    a {
+                        color: $textColorOnColorBackground;
+                    }
+                    a:hover {
+                        text-decoration: none;
+                        opacity: 0.7;
+                    }
                 }
             }
         }

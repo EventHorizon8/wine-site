@@ -26,9 +26,10 @@
                 <button type="submit" :disabled="isLoading">Show</button>
             </form>
         </div>
-        <div class="container">
+        <div class="container" v-if="!isLoading">
             <WineRatesTable :items="items"/>
         </div>
+        <p v-if="isLoading">Loading...</p>
     </div>
 </template>
 
@@ -48,7 +49,7 @@
                     country: '',
                     vintage: ''
                 },
-                isLoading: false
+                isLoading: true
             };
         },
         computed: {
@@ -58,7 +59,9 @@
         },
         created: async function () {
             const { color } = this.form;
-            await this.$store.dispatch('getWines', {color})
+            await this.$store.dispatch('getWines', {color}).then(() => {
+                this.isLoading = false;
+            })
         },
         methods: {
             submitForm() {
