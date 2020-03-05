@@ -20,9 +20,15 @@
                 <label for="country">
                     <input name="country" id="country" v-model="form.country" placeholder="Country"/>
                 </label>
-                <label for="vintage">
-                    <input name="vintage" id="vintage" v-model="form.vintage" placeholder="Vintage"/>
-                </label>
+                <ValidationProvider :rules="{between: {min: form.minVintage, max: form.maxVintage}}" v-slot="{ errors }">
+                        <label for="vintage" style="position: relative">
+                            <input name="vintage" id="vintage" v-model="form.vintage"
+                                   placeholder="Vintage" type="number"/>
+                            <span class="error-text " v-if="errors[0]" style="position: absolute; bottom: -20px; left: 0">
+                                Vintage are not available
+                            </span>
+                        </label>
+                </ValidationProvider>
                 <button type="submit" :disabled="isLoading">Show</button>
             </form>
         </div>
@@ -47,7 +53,9 @@
                     color: 'red',
                     wineType: '',
                     country: '',
-                    vintage: ''
+                    vintage: '',
+                    minVintage: 1863,
+                    maxVintage: new Date().getFullYear(),
                 },
                 isLoading: true
             };
@@ -91,7 +99,7 @@
     .search-filters-container {
         text-align: center;
         background: $primaryColor;
-        padding: 10px 0 10px 0;
+        padding: 10px 0 20px 0;
         .search-filters-form {
             label select, input {
                 background: $primaryLightColor;
@@ -107,6 +115,11 @@
             label select:focus, select:hover, input:focus, input:hover, textarea:focus, textarea:hover {
                 background: $primaryLightColorFocus;
                 border: 1px solid $primaryColorFocus;
+            }
+            span.error-text {
+                color: $textColorOnColorBackground;
+                font-size: 0.7em;
+                opacity: 0.8;
             }
             ::placeholder {
                 color: $textColorOnColorBackground;
