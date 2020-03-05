@@ -1,2 +1,2 @@
 # wine-site
-Wine ratings
+Wine ratings using API https://www.globalwinescore.com/ 
